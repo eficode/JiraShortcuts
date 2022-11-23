@@ -1,4 +1,4 @@
-package com.eficode.atlassian.JiraShortcuts.tests.jiraLocalScripts
+package com.eficode.atlassian.JiraShortcuts.test.resources.jiraLocalScripts
 
 import com.atlassian.applinks.api.ApplicationLink
 import com.atlassian.applinks.api.application.bitbucket.BitbucketApplicationType
@@ -16,12 +16,8 @@ log.setLevel(Level.ALL)
 
 JiraShortcuts jc = new JiraShortcuts()
 
-ApplicationLink link  = jc.createApplicationLink(BitbucketApplicationType, "Bitbucket", true, "http://bitbucket.domain.se:7990", "admin", "admin")
+ApplicationLink link  = jc.createApplicationLink(BitbucketApplicationType, "Bitbucket", true, "BITBUCKET_URL", "BITBUCKET_USER", "BITBUCKET_PASSWORD")
 
 log.info("Created link:" + link.toString())
-
-assert jc.deleteApplicationLink(link)
-
-log.info("Deleted link:" + link)
 
 log.info("Script END")

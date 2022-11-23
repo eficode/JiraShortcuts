@@ -1,5 +1,9 @@
 package com.eficode.atlassian.JiraShortcuts
 
+@Grapes(
+        @Grab(group='org.codehaus.groovy', module='groovy-json', version='3.0.12')
+)
+
 import com.atlassian.applinks.api.ApplicationLink
 import com.atlassian.applinks.api.ApplicationLinkRequestFactory
 import com.atlassian.applinks.api.ApplicationLinkResponseHandler
@@ -18,6 +22,7 @@ import com.atlassian.jira.user.ApplicationUser
 import com.atlassian.sal.api.net.Request
 import com.atlassian.sal.api.net.Response
 import com.atlassian.sal.api.net.ResponseException
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.onresolve.scriptrunner.runner.customisers.WithPlugin
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
@@ -31,6 +36,7 @@ class JiraShortcuts {
     JiraAuthenticationContext authContext = ComponentAccessor.getJiraAuthenticationContext()
     Logger log = Logger.getLogger(JiraShortcuts.class)
 
+    ObjectMapper objectMapper = new ObjectMapper()
 
     JiraShortcuts() {
         log.setLevel(Level.ALL)
@@ -120,6 +126,19 @@ class JiraShortcuts {
 
 
 
+    def appLinkGetJson(String url, String body = null, String contentType = null, ApplicationLink applicationLink, ApplicationUser requestUser = null){
+
+
+        Response rawResponse = appLinkRequest(Request.MethodType.GET, url, body, contentType, applicationLink, requestUser)
+
+        String rawBody = rawResponse.getResponseBodyAsString()
+
+        return objectMapper.readTree(rawBody)
+
+    }
+
+
+
     Response appLinkRequest(Request.MethodType requestMethod, String url, String body = null, String contentType = null, ApplicationLink applicationLink, ApplicationUser requestUser = null) {
 
         ApplicationUser initialUser = authContext.getLoggedInUser()
@@ -128,7 +147,7 @@ class JiraShortcuts {
         log.debug("\tAppLink:" + applicationLink)
         log.debug("\tURL:" + url)
         log.debug("\tHTTP Method:" + requestMethod.toString())
-        log.debug("\tAs user:" + requestUser ?: initialUser)
+        log.debug("\tAs user:" + requestUser != null ? requestUser : initialUser)
 
         Response response
         try {

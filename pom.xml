@@ -9,7 +9,7 @@
     <version>2.0-SNAPSHOT</version>
     <name>JiraShortcuts - Parent pom</name>
     <description>A groovy library with shortcuts for common JIRA java actions</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <organization>
         <name>Eficode</name>
@@ -30,9 +30,27 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>3.0.13</version>
+            <version>3.0.12</version>
             <scope>provided</scope>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.fasterxml.jackson.databind</artifactId>
+            <version>2.10.5.1.LIFERAY-PATCHED-1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>2.2-groovy-3.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ivy</groupId>
+            <artifactId>ivy</artifactId>
+            <version>2.5.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -41,6 +59,24 @@
             <version>1.1.0-SNAPSHOT-groovy-3.0</version>
             <scope>test</scope>
         </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.atlassian.oauth/atlassian-oauth-consumer-core -->
+        <dependency>
+            <groupId>com.atlassian.oauth</groupId>
+            <artifactId>atlassian-oauth-consumer-core</artifactId>
+            <version>5.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.atlassian.oauth/atlassian-oauth-consumer-spi -->
+        <dependency>
+            <groupId>com.atlassian.oauth</groupId>
+            <artifactId>atlassian-oauth-consumer-spi</artifactId>
+            <version>5.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+
 
 
         <!-- https://mvnrepository.com/artifact/com.atlassian.applinks/applinks-plugin -->
@@ -144,9 +180,21 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+
+                            <!--filters>
+                                <filter>
+                                    <artifact>org.codehaus.groovy:groovy-all</artifact>
+                                    <includes>
+                                        <include>groovy/json/**</include>
+                                    </includes>
+                                </filter>
+                            </filters-->
+
+
                             <!-- Will output 2 jars: the original, and the shaded one -->
                             <shadedArtifactAttached>true</shadedArtifactAttached>
 
+                            <minimizeJar>true</minimizeJar>
                             <!-- final name of the shaded jar will be ${project.artifactId}-standalone -->
                             <shadedClassifierName>standalone</shadedClassifierName>
 
@@ -194,7 +242,7 @@
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy</artifactId>
-                        <version>3.0.13</version>
+                        <version>3.0.12</version>
                         <scope>runtime</scope>
                     </dependency>
                 </dependencies>
@@ -261,3 +309,5 @@
 
 
 </project>
+
+

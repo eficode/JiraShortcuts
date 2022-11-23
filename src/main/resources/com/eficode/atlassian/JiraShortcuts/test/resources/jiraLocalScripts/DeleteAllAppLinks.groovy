@@ -1,4 +1,4 @@
-package com.eficode.atlassian.JiraShortcuts.tests.jiraLocalScripts
+package com.eficode.atlassian.JiraShortcuts.test.resources.jiraLocalScripts
 
 import com.onresolve.scriptrunner.runner.customisers.WithPlugin
 
