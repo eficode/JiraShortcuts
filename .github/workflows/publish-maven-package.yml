@@ -49,7 +49,7 @@ jobs:
         run: |
           
           
-          mkdir -p repository/com/eficode/atlassian/jiraShortcuts
+          mkdir -p repository/com/eficode/atlassian/jira/jiraShortcuts
           echo Compiling, Packaging and Installing Groovy 3.0 version of library to local m2 directory
           atlas-mvn install -f pom.xml  -DcreateChecksum=true
           
@@ -62,7 +62,7 @@ jobs:
       - name: Copying JAR files
         run: |
           echo Copying the new JAR files to repository which will be added to git branch "packages"
-          rsync -avh --checksum ~/.m2/repository/com/eficode/atlassian/jiraShortcuts/ repository/com/eficode/atlassian/jiraShortcuts/
+          rsync -avh --checksum ~/.m2/repository/com/eficode/atlassian/jira/jiraShortcuts/ repository/com/eficode/atlassian/jira/jiraShortcuts/
       - name: Committing and pushing JAR files
         run: |
           
