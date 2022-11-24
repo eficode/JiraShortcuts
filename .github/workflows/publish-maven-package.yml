@@ -45,7 +45,6 @@ jobs:
           mkdir -p repository/com/eficode/atlassian/jiraShortcuts
           echo Compiling, Packaging and Installing Groovy 3.0 version of library to local m2 directory
           atlas-mvn install -f pom.xml  -DcreateChecksum=true
-          atlas-package
           
 
       - name: Installing Groovy 2.5 Version
