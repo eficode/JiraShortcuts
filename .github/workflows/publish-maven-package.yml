@@ -34,7 +34,6 @@ jobs:
             wget https://packages.atlassian.com/api/gpg/key/public
             sudo apt-key add public
             sudo apt-get update
-          shell:bash
 
       - name: Restore Atlassian SDK from cache
         uses: awalsh128/cache-apt-pkgs-action@latest
