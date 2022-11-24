@@ -3,7 +3,7 @@
         name="${project.artifactId}"
         plugins-version="2">
     <plugin-info>
-        <description>${project.description}</description>
+        <description>{project.description}</description>
         <version>${project.version}</version>
         <vendor name="${project.organization.name}" url="${project.organization.url}" />
     </plugin-info>
