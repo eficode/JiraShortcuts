@@ -1,9 +1,9 @@
-package com.eficode.atlassian.JiraShortcuts.tests.jiraLocalScripts
-
-import com.onresolve.scriptrunner.runner.customisers.WithPlugin
+package com.eficode.atlassian.jira.jiraShortcuts.tests.jiraLocalScripts
+/*
+package com.eficode.atlassian.jira.jiraShortcuts.tests.jiraLocalScripts
 
 @WithPlugin("com.eficode.atlassian.JiraShortcuts")
-import com.eficode.atlassian.JiraShortcuts.JiraShortcuts
+import com.eficode.atlassian.jira.jiraShortcuts.JiraShortcuts
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 
@@ -23,3 +23,5 @@ jc.appLinkService.getApplicationLinks().each { appLink ->
 
 
 log.info("Script END")
+
+ */

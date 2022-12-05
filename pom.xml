@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.eficode.atlassian</groupId>
-    <artifactId>JiraShortcuts</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
-    <name>JiraShortcuts - Parent pom</name>
+    <groupId>com.eficode.atlassian.jira</groupId>
+    <artifactId>jiraShortcuts</artifactId>
+    <version>2.0.1-SNAPSHOT-groovy-${groovy.major.version}</version>
+    <name>JiraShortcuts</name>
     <description>A groovy library with shortcuts for common JIRA java actions</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <organization>
         <name>Eficode</name>
@@ -19,8 +19,10 @@
     <properties>
 
         <jira.version>9.1.0</jira.version>
-        <spock-core.version>2.3-groovy-3.0</spock-core.version>
         <jsd.api.version>5.0.0</jsd.api.version>
+        <groovy.version>3.0.13</groovy.version>
+        <groovy.major.version>3.0</groovy.major.version>
+        <spock-core.version>2.2-groovy-3.0</spock-core.version>
         <logging.levels>com.example;DEBUG,com.onresolve;DEBUG</logging.levels>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -32,8 +34,8 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>3.0.13</version>
-            <scope>provided</scope>
+            <version>${groovy.version}</version>
+            <scope>compile</scope>
             <type>pom</type>
         </dependency>
 
@@ -127,6 +129,10 @@
                     <groupId>org.twdata.pkgscanner</groupId>
                     <artifactId>package-scanner</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -148,6 +154,22 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>jira-maven-plugin</artifactId>
+                <version>8.8.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <productVersion>${jira.version}</productVersion>
+                    <instructions>
+                        <Import-Package>
+                            org.springframework.osgi.*;resolution:="optional",
+                            org.eclipse.gemini.blueprint.*;resolution:="optional",
+                            *
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
                 <!-- Configured in pluginManagement instead of plugins, because we do not want a shaded parent POM -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -165,7 +187,33 @@
                             <!-- final name of the shaded jar will be ${project.artifactId}-standalone -->
                             <shadedClassifierName>standalone</shadedClassifierName>
 
+                            <createSourcesJar>true</createSourcesJar>
 
+
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.codehaus.groovy:*</exclude>
+                                    <!--exclude>org.codehaus.groovy:groovy</exclude>
+                                    <exclude>org.codehaus.groovy:groovy-astbuilder</exclude-->
+
+                                    <!--exclude>com.google.code.gson:gson</exclude-->
+                                    <exclude>org.apache.httpcomponents</exclude>
+                                    <exclude>commons-*</exclude>
+
+                                </excludes>
+
+                            </artifactSet>
                             <createDependencyReducedPom>true</createDependencyReducedPom>
 
                         </configuration>
@@ -190,7 +238,7 @@
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
-                <version>1.13.1</version>
+                <version>2.1.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -209,27 +257,12 @@
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy</artifactId>
-                        <version>3.0.13</version>
+                        <version>${groovy.version}</version>
                         <scope>runtime</scope>
                     </dependency>
                 </dependencies>
-                <!--configuration>
-                    <sources>
-                        <source>
-                            <directory>${project.basedir}/src/main/groovy</directory>
-                            <includes>
-                                <include>**/*.groovy</include>
-                            </includes>
-                        </source>
-                    </sources>
-                </configuration-->
+            </plugin>
 
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -248,6 +281,10 @@
 
     <repositories>
 
+        <repository>
+            <id>atlassian-public</id>
+            <url>https://packages.atlassian.com/maven-public/</url>
+        </repository>
         <!-- This is required to find the parent pom and ScriptRunner dependencies -->
         <repository>
             <id>maven-central</id>
@@ -272,7 +309,21 @@
             <id>devStack-github</id>
             <url>https://github.com/eficode/devStack/raw/packages/repository</url>
         </repository>
+
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>atlassian-public</id>
+            <url>https://m2proxy.atlassian.com/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 
 </project>

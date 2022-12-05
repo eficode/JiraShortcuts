@@ -28,6 +28,16 @@ jobs:
       # git commit --allow-empty -m "Initial commit on packages branch"
       # git push origin packages:packages
 
+      - name: Install Atlassian SDK
+        run: |
+            sudo sh -c 'echo "deb https://packages.atlassian.com/debian/atlassian-sdk-deb/ stable contrib" >> /etc/apt/sources.list'
+            wget https://packages.atlassian.com/api/gpg/key/public
+            sudo apt-key add public
+            sudo apt-get update
+            sudo apt-get install atlassian-plugin-sdk
+            atlas-version
+
+
       - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
@@ -35,36 +45,24 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
-      - name: Installing parent pom file
+      - name: Installing Groovy 3 version
         run: |
           
-          localm2=$(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
-          echo Local M2: ${localm2}
           
-          mkdir -p repository/com/eficode/atlassian/JiraShortcuts
+          mkdir -p repository/com/eficode/atlassian/jira/jiraShortcuts
+          echo Compiling, Packaging and Installing Groovy 3.0 version of library to local m2 directory
+          atlas-mvn install -f pom.xml  -DcreateChecksum=true
           
-          echo Installing parent pom file
-          mvn install:install-file -Dpackaing=pom -Dfile=pom.xml -DpomFile=pom.xml -DcreateChecksum=true
 
       - name: Installing Groovy 2.5 Version
         run: |
           
           echo Compiling, Packaging and Installing Groovy 2.5 version of library to local m2 directory
-          mvn install -f pom-2.5.xml -DcreateChecksum=true
-
-      - name: Installing Groovy 3 Version
-        run: |
-          
-          echo Compiling, Packaging and Installing Groovy 3.0 version of library to local m2 directory
-          mvn install -f pom-3.0.xml  -DcreateChecksum=true
-          
-
+          atlas-mvn install -f pom.xml -DcreateChecksum=true -Dgroovy.major.version=2.5 -Dgroovy.version=2.5.18 -Dspock-core.version=2.2-groovy-2.5
       - name: Copying JAR files
         run: |
           echo Copying the new JAR files to repository which will be added to git branch "packages"
-          rsync -avh --checksum ~/.m2/repository/com/eficode/atlassian/JiraShortcuts/ repository/com/eficode/atlassian/JiraShortcuts/
-          
+          rsync -avh --checksum ~/.m2/repository/com/eficode/atlassian/jira/jiraShortcuts/ repository/com/eficode/atlassian/jira/jiraShortcuts/
       - name: Committing and pushing JAR files
         run: |
           
