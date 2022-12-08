@@ -6,10 +6,18 @@
 
     <groupId>com.eficode.atlassian.jira</groupId>
     <artifactId>jiraShortcuts</artifactId>
-    <version>2.0.1-SNAPSHOT-groovy-${groovy.major.version}</version>
+    <version>2.0.2-SNAPSHOT</version>
     <name>JiraShortcuts</name>
     <description>A groovy library with shortcuts for common JIRA java actions</description>
-    <packaging>jar</packaging>
+    <packaging>atlassian-plugin</packaging>
+
+    <!--parent>
+        <groupId>com.adaptavist.pom</groupId>
+        <artifactId>scriptrunner-jira-standard</artifactId>
+        <version>38</version>
+        <relativePath/>
+    </parent-->
+
 
     <organization>
         <name>Eficode</name>
@@ -19,6 +27,7 @@
     <properties>
 
         <jira.version>9.1.0</jira.version>
+        <jira.software.version>9.1.0</jira.software.version>
         <jsd.api.version>5.0.0</jsd.api.version>
         <groovy.version>3.0.13</groovy.version>
         <groovy.major.version>3.0</groovy.major.version>
@@ -35,7 +44,7 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <type>pom</type>
         </dependency>
 
@@ -158,121 +167,30 @@
                 <artifactId>jira-maven-plugin</artifactId>
                 <version>8.8.1</version>
                 <extensions>true</extensions>
+
                 <configuration>
                     <productVersion>${jira.version}</productVersion>
-                    <instructions>
-                        <Import-Package>
-                            org.springframework.osgi.*;resolution:="optional",
-                            org.eclipse.gemini.blueprint.*;resolution:="optional",
-                            *
-                        </Import-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!-- Configured in pluginManagement instead of plugins, because we do not want a shaded parent POM -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Will output 2 jars: the original, and the shaded one -->
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
 
-                            <!-- final name of the shaded jar will be ${project.artifactId}-standalone -->
-                            <shadedClassifierName>standalone</shadedClassifierName>
+                    <jvmArgs>-Xms1g -Xmx2500m -XX:MaxPermSize=1g -XX:-UseGCOverheadLimit -server</jvmArgs>
+                    <applications>
+                        <!-- Uncomment these if you wish to include them -->
 
-                            <createSourcesJar>true</createSourcesJar>
+                        <!-- Include Jira Software features -->
+                        <!--
+                        <application>
+                            <applicationKey>jira-software</applicationKey>
+                            <version>${jira.software.version}</version>
+                        </application>
+                        -->
 
+                        <!-- Include Jira Service Desk features -->
 
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
+                        <application>
+                            <applicationKey>jira-servicedesk</applicationKey>
+                            <version>4.13.25</version>
+                        </application>
+                    </applications>
 
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.codehaus.groovy:*</exclude>
-                                    <!--exclude>org.codehaus.groovy:groovy</exclude>
-                                    <exclude>org.codehaus.groovy:groovy-astbuilder</exclude-->
-
-                                    <!--exclude>com.google.code.gson:gson</exclude-->
-                                    <exclude>org.apache.httpcomponents</exclude>
-                                    <exclude>commons-*</exclude>
-
-                                </excludes>
-
-                            </artifactSet>
-                            <createDependencyReducedPom>true</createDependencyReducedPom>
-
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                            <goal>test-jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <version>2.1.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>addSources</goal>
-                            <goal>addTestSources</goal>
-                            <goal>generateStubs</goal>
-                            <goal>compile</goal>
-                            <goal>generateTestStubs</goal>
-                            <goal>compileTests</goal>
-                            <goal>removeStubs</goal>
-                            <goal>removeTestStubs</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy</artifactId>
-                        <version>${groovy.version}</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M7</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Spec.class</include>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
         </plugins>
@@ -306,9 +224,14 @@
             <url>https://packages.atlassian.com/mvn/maven-atlassian-external/</url>
         </repository>
         <repository>
+            <id>Atlassian-public</id>
+            <url>https://maven.atlassian.com/content/repositories/atlassian-public/</url>
+        </repository>
+        <repository>
             <id>devStack-github</id>
             <url>https://github.com/eficode/devStack/raw/packages/repository</url>
         </repository>
+
 
     </repositories>
 

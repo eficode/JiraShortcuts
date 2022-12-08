@@ -30,6 +30,10 @@ jobs:
 
       - name: Install Atlassian SDK
         run: |
+          
+            which mvn
+            exit 9
+          
             sudo sh -c 'echo "deb https://packages.atlassian.com/debian/atlassian-sdk-deb/ stable contrib" >> /etc/apt/sources.list'
             wget https://packages.atlassian.com/api/gpg/key/public
             sudo apt-key add public
