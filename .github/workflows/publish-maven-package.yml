@@ -32,6 +32,8 @@ jobs:
         run: |
           
             which mvn
+            mvn -version
+            export ATLAS_MVN=/usr/bin/mvn
             exit 9
           
             sudo sh -c 'echo "deb https://packages.atlassian.com/debian/atlassian-sdk-deb/ stable contrib" >> /etc/apt/sources.list'
