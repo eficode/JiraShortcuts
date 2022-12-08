@@ -1,0 +1,7 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Dec 08 16:15:29 UTC 2022
+jiraShortcuts-2.0.2-SNAPSHOT-groovy-2.5.pom>=
+jiraShortcuts-2.0.2-SNAPSHOT-groovy-2.5.jar>=
+jiraShortcuts-2.0.2-SNAPSHOT-groovy-2.5-sources.jar>=
+jiraShortcuts-2.0.2-SNAPSHOT-groovy-2.5-test-sources.jar>=
+jiraShortcuts-2.0.2-SNAPSHOT-groovy-2.5-standalone.jar>=
