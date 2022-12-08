@@ -30,11 +30,7 @@ jobs:
 
       - name: Install Atlassian SDK
         run: |
-          
-            which mvn
-            mvn -version
             export ATLAS_MVN=/usr/bin/mvn
-            exit 9
           
             sudo sh -c 'echo "deb https://packages.atlassian.com/debian/atlassian-sdk-deb/ stable contrib" >> /etc/apt/sources.list'
             wget https://packages.atlassian.com/api/gpg/key/public
@@ -57,6 +53,8 @@ jobs:
           
           mkdir -p repository/com/eficode/atlassian/jira/jiraShortcuts
           echo Compiling, Packaging and Installing Groovy 3.0 version of library to local m2 directory
+          
+          export ATLAS_MVN=/usr/bin/mvn
           atlas-mvn install -f pom.xml  -DcreateChecksum=true
           
 
@@ -64,6 +62,8 @@ jobs:
         run: |
           
           echo Compiling, Packaging and Installing Groovy 2.5 version of library to local m2 directory
+          
+          export ATLAS_MVN=/usr/bin/mvn
           atlas-mvn install -f pom.xml -DcreateChecksum=true -Dgroovy.major.version=2.5 -Dgroovy.version=2.5.18 -Dspock-core.version=2.2-groovy-2.5
       - name: Copying JAR files
         run: |
