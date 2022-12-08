@@ -32,7 +32,7 @@ import com.atlassian.jira.web.bean.PagerFilter
 import com.atlassian.servicedesk.api.ServiceDeskManager
 import com.atlassian.servicedesk.api.requesttype.RequestType
 import com.atlassian.servicedesk.api.requesttype.RequestTypeService
-
+import com.onresolve.scriptrunner.runner.customisers.WithPlugin
 import org.apache.commons.lang3.math.NumberUtils
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
@@ -42,6 +42,9 @@ import org.apache.log4j.Logger
 class JiraShortcuts {
 
 
+
+
+    @WithPlugin("com.atlassian.applinks.applinks-plugin")
 
 
     MutatingApplicationLinkService appLinkService = ComponentAccessor.getOSGiComponentInstanceOfType(MutatingApplicationLinkService) as DefaultApplicationLinkService
@@ -67,7 +70,7 @@ class JiraShortcuts {
     JiraShortcuts() {
 
         this.log.setLevel(Level.ALL)
-        log.info("JiraShortcuts has started")
+        log.info("JiraShortcuts has started HEj Hasdasd 2.0.2")
 
         serviceUser = authenticationContext.getLoggedInUser()
     }

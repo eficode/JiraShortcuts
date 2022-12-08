@@ -1,10 +1,12 @@
 package com.eficode.atlassian.jira.jiraShortcuts.tests.jiraLocalScripts
 
-/*
-package com.eficode.atlassian.jira.jiraShortcuts.tests.jiraLocalScripts
 
 import com.atlassian.applinks.api.ApplicationLink
 import com.atlassian.applinks.api.application.bitbucket.BitbucketApplicationType
+
+
+import com.onresolve.scriptrunner.runner.customisers.WithPlugin
+
 @WithPlugin("com.eficode.atlassian.JiraShortcuts")
 import com.eficode.atlassian.jira.jiraShortcuts.JiraShortcuts
 import org.apache.log4j.Level
@@ -27,5 +29,3 @@ log.info("Deleted link:" + link)
 
 log.info("Script END")
 
-
- */

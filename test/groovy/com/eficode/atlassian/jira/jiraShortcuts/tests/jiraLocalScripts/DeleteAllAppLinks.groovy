@@ -1,5 +1,5 @@
 package com.eficode.atlassian.jira.jiraShortcuts.tests.jiraLocalScripts
-/*
+
 package com.eficode.atlassian.jira.jiraShortcuts.tests.jiraLocalScripts
 
 @WithPlugin("com.eficode.atlassian.JiraShortcuts")
@@ -24,4 +24,3 @@ jc.appLinkService.getApplicationLinks().each { appLink ->
 
 log.info("Script END")
 
- */
