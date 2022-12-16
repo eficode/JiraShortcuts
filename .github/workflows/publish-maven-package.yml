@@ -42,7 +42,7 @@ jobs:
         
           mkdir -p repository/com/eficode/atlassian/jiraShortcuts
           echo Compiling, Packaging and Installing Groovy 3.0 version of library to local m2 directory
-          mvn install -P groovy-3 -DcreateChecksum=true -Drevision=3
+          mvn install -P groovy-3 -DcreateChecksum=true -Drevision=3.0
 
 
       - name: Installing Groovy 2.5 Version
